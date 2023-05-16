@@ -32,11 +32,45 @@ namespace SuperHero_.NET7.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<List<SuperHero>>> GetSingleHero(int id)
+        public async Task<ActionResult<SuperHero>> GetSingleHero(int id)
         {
             var hero = superHeroes.Find(x => x.Id == id);
+            if(hero is null)
+                return NotFound("Sorry! No Any Content.");
             return Ok(hero);
         }
 
+        [HttpPost]
+        public async Task<ActionResult<List<SuperHero>>> AddSuperHero(SuperHero superHero)
+        {
+            superHeroes.Add(superHero); 
+            return Ok(superHeroes); 
+        }
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<SuperHero>> UpdateHero(int id, SuperHero request)
+        {
+            var hero = superHeroes.Find(x => x.Id == id);
+            if (hero is null)
+                return NotFound("Sorry! No Any Content.");
+
+            hero.Name = request.Name;
+            hero.FirstName = request.FirstName;
+            hero.LastName = request.LastName; 
+            hero.Place = request.Place;
+
+            return Ok(superHeroes);
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<SuperHero>> DeleteHero(int id)
+        {
+            var hero = superHeroes.Find(x => x.Id == id);
+            if (hero is null)
+                return NotFound("Sorry! No Any Content.");
+
+            superHeroes.Remove(hero);
+            return Ok(superHeroes);
+        }
     }
 }
