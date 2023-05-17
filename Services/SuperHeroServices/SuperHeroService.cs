@@ -1,4 +1,6 @@
-﻿using SuperHero_.NET7.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using SuperHero_.NET7.Data;
+using SuperHero_.NET7.Models;
 
 namespace SuperHero_.NET7.Services.SuperHeroServices
 {
@@ -15,6 +17,12 @@ namespace SuperHero_.NET7.Services.SuperHeroServices
                 Place = ""
             }
         };
+        private readonly DataContext _context;
+
+        public SuperHeroService(DataContext context)
+        {
+            _context = context;
+        }
 
         public List<SuperHero> AddSuperHero(SuperHero superHero)
         {
@@ -31,8 +39,9 @@ namespace SuperHero_.NET7.Services.SuperHeroServices
             return superHeroes;
         }
 
-        public List<SuperHero>? GetAllHeroes()
+        public async Task<List<SuperHero>> GetAllHeroes()
         {
+            var superHeroes = await _context.SuperHeroes.ToListAsync();
             return superHeroes;
         }
 

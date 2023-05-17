@@ -18,7 +18,7 @@ namespace SuperHero_.NET7.Controllers
         [HttpGet]
         public async Task<ActionResult<List<SuperHero>>> GetAllHeroes()
         {
-            return _superHeroService.GetAllHeroes();
+            return await _superHeroService.GetAllHeroes();
         }
 
         [HttpGet("{id}")]
