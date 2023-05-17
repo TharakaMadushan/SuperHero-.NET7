@@ -24,38 +24,41 @@ namespace SuperHero_.NET7.Services.SuperHeroServices
             _context = context;
         }
 
-        public List<SuperHero> AddSuperHero(SuperHero superHero)
+        public async Task<List<SuperHero>> AddSuperHero(SuperHero superHero)
         {
-            superHeroes.Add(superHero);
-            return superHeroes;
+            _context.SuperHeroes.Add(superHero);
+            await _context.SaveChangesAsync();
+            return await _context.SuperHeroes.ToListAsync();
         }
 
-        public List<SuperHero>? DeleteHero(int id)
+        public async Task<List<SuperHero>?> DeleteHero(int id)
         {
-            var hero = superHeroes.Find(x => x.Id == id);
+            var hero = await _context.SuperHeroes.FindAsync(id);
             if (hero == null)
                 return null;
-            superHeroes.Remove(hero);
-            return superHeroes;
+
+            _context.SuperHeroes.Remove(hero);
+            await _context.SaveChangesAsync();
+            return await _context.SuperHeroes.ToListAsync();
         }
 
         public async Task<List<SuperHero>> GetAllHeroes()
         {
             var superHeroes = await _context.SuperHeroes.ToListAsync();
-            return superHeroes;
+            return await _context.SuperHeroes.ToListAsync();
         }
 
-        public SuperHero? GetSingleHero(int id)
+        public async Task<SuperHero?> GetSingleHero(int id)
         {
-            var hero = superHeroes.Find(x => x.Id == id);
+            var hero = await _context.SuperHeroes.FindAsync(id);
             if (hero is null)
                 return null;
             return hero;
         }
 
-        public List<SuperHero>? UpdateHero(int id, SuperHero request)
+        public async Task<List<SuperHero>?> UpdateHero(int id, SuperHero request)
         {
-            var hero = superHeroes.Find(x => x.Id == id);
+            var hero = await _context.SuperHeroes.FindAsync(id);
             if (hero is null)
                 return null;
 
@@ -64,7 +67,8 @@ namespace SuperHero_.NET7.Services.SuperHeroServices
             hero.LastName = request.LastName;
             hero.Place = request.Place;
 
-            return superHeroes;
+            await _context.SaveChangesAsync();
+            return await _context.SuperHeroes.ToListAsync();
         }
     }
 }
